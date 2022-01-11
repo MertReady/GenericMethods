@@ -37,7 +37,7 @@ namespace GenericMethods
 
             if (typeof(TEntity).GetProperty("Id",typeof(Guid)) != null)
             {
-                entity = entities.FirstOrDefault(e=> (Guid)(typeof(TEntity).GetProperty("Id",typeof(Guid)).GetValue(e)) == id);
+                entity = entities.FirstOrDefault(e=> Guid.Parse(typeof(TEntity).GetProperty("Id",typeof(Guid)).GetValue(e).ToString()) == id);
             }
             return entity;
         }
@@ -48,7 +48,7 @@ namespace GenericMethods
 
             if (typeof(TEntity).GetProperty("Id", typeof(Guid)) != null)
             {
-                entity = entities.FirstOrDefault(e => (Guid)(typeof(TEntity).GetProperty("Id", typeof(Guid)).GetValue(e)) == id);
+                entity = entities.FirstOrDefault(e => Guid.Parse(typeof(TEntity).GetProperty("Id", typeof(Guid)).GetValue(e).ToString()) == id);
             }
             return entity;
         }
@@ -59,7 +59,7 @@ namespace GenericMethods
 
             if (typeof(TEntity).GetProperty("Id", typeof(int)) != null)
             {
-                entity = entities.FirstOrDefault(e => (int)(typeof(TEntity).GetProperty("Id", typeof(int)).GetValue(e)) == id);
+                entity = entities.FirstOrDefault(e => Convert.ToInt32(typeof(TEntity).GetProperty("Id", typeof(int)).GetValue(e).ToString()) == id);
             }
             return entity;
         }
@@ -70,7 +70,29 @@ namespace GenericMethods
 
             if (typeof(TEntity).GetProperty("Id", typeof(int)) != null)
             {
-                entity = entities.FirstOrDefault(e => (int)(typeof(TEntity).GetProperty("Id", typeof(int)).GetValue(e)) == id);
+                entity = entities.FirstOrDefault(e => Convert.ToInt32(typeof(TEntity).GetProperty("Id", typeof(int)).GetValue(e).ToString()) == id);
+            }
+            return entity;
+        }
+
+        public static TEntity GetEntityById<TEntity>(this IQueryable<TEntity> entities, long id) where TEntity : class
+        {
+            var entity = default(TEntity);
+
+            if (typeof(TEntity).GetProperty("Id", typeof(long)) != null)
+            {
+                entity = entities.FirstOrDefault(e => Convert.ToInt64(typeof(TEntity).GetProperty("Id", typeof(long)).GetValue(e).ToString()) == id);
+            }
+            return entity;
+        }
+
+        public static TEntity GetEntityById<TEntity>(this IEnumerable<TEntity> entities, long id) where TEntity : class
+        {
+            var entity = default(TEntity);
+
+            if (typeof(TEntity).GetProperty("Id", typeof(long)) != null)
+            {
+                entity = entities.FirstOrDefault(e => Convert.ToInt64(typeof(TEntity).GetProperty("Id", typeof(long)).GetValue(e).ToString()) == id);
             }
             return entity;
         }
