@@ -30,6 +30,50 @@ namespace GenericMethods
             var result = mainCollection.Where(predicate).OrderByDescending(key);
             return result;
         }
+
+        public static TEntity GetEntityById<TEntity>(this IQueryable<TEntity> entities,Guid id) where TEntity : class
+        {
+            var entity = default(TEntity);
+
+            if (typeof(TEntity).GetProperty("Id",typeof(Guid)) != null)
+            {
+                entity = entities.FirstOrDefault(e=> (Guid)(typeof(TEntity).GetProperty("Id",typeof(Guid)).GetValue(e)) == id);
+            }
+            return entity;
+        }
+
+        public static TEntity GetEntityById<TEntity>(this IEnumerable<TEntity> entities, Guid id) where TEntity : class
+        {
+            var entity = default(TEntity);
+
+            if (typeof(TEntity).GetProperty("Id", typeof(Guid)) != null)
+            {
+                entity = entities.FirstOrDefault(e => (Guid)(typeof(TEntity).GetProperty("Id", typeof(Guid)).GetValue(e)) == id);
+            }
+            return entity;
+        }
+
+        public static TEntity GetEntityById<TEntity>(this IQueryable<TEntity> entities, int id) where TEntity : class
+        {
+            var entity = default(TEntity);
+
+            if (typeof(TEntity).GetProperty("Id", typeof(int)) != null)
+            {
+                entity = entities.FirstOrDefault(e => (int)(typeof(TEntity).GetProperty("Id", typeof(int)).GetValue(e)) == id);
+            }
+            return entity;
+        }
+
+        public static TEntity GetEntityById<TEntity>(this IEnumerable<TEntity> entities, int id) where TEntity : class
+        {
+            var entity = default(TEntity);
+
+            if (typeof(TEntity).GetProperty("Id", typeof(int)) != null)
+            {
+                entity = entities.FirstOrDefault(e => (int)(typeof(TEntity).GetProperty("Id", typeof(int)).GetValue(e)) == id);
+            }
+            return entity;
+        }
         #endregion
     }
 }
