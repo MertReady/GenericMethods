@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace GenericMethods
 {
@@ -31,13 +32,13 @@ namespace GenericMethods
             return result;
         }
 
-        public static TEntity GetEntityById<TEntity>(this IQueryable<TEntity> entities,Guid id) where TEntity : class
+        public static TEntity GetEntityById<TEntity>(this IQueryable<TEntity> entities, Guid id) where TEntity : class
         {
             var entity = default(TEntity);
 
-            if (typeof(TEntity).GetProperty("Id",typeof(Guid)) != null)
+            if (entity.HasPropertyWithType<TEntity>("Id", typeof(Guid)))
             {
-                entity = entities.FirstOrDefault(e=> Guid.Parse(typeof(TEntity).GetProperty("Id",typeof(Guid)).GetValue(e).ToString()) == id);
+                entity = entities.FirstOrDefault(e => Guid.Parse(typeof(TEntity).GetProperty("Id", typeof(Guid)).GetValue(e).ToString()) == id);
             }
             return entity;
         }
@@ -46,7 +47,7 @@ namespace GenericMethods
         {
             var entity = default(TEntity);
 
-            if (typeof(TEntity).GetProperty("Id", typeof(Guid)) != null)
+            if (entity.HasPropertyWithType<TEntity>("Id", typeof(Guid)))
             {
                 entity = entities.FirstOrDefault(e => Guid.Parse(typeof(TEntity).GetProperty("Id", typeof(Guid)).GetValue(e).ToString()) == id);
             }
@@ -57,7 +58,7 @@ namespace GenericMethods
         {
             var entity = default(TEntity);
 
-            if (typeof(TEntity).GetProperty("Id", typeof(int)) != null)
+            if (entity.HasPropertyWithType<TEntity>("Id", typeof(int)))
             {
                 entity = entities.FirstOrDefault(e => Convert.ToInt32(typeof(TEntity).GetProperty("Id", typeof(int)).GetValue(e).ToString()) == id);
             }
@@ -68,7 +69,7 @@ namespace GenericMethods
         {
             var entity = default(TEntity);
 
-            if (typeof(TEntity).GetProperty("Id", typeof(int)) != null)
+            if (entity.HasPropertyWithType<TEntity>("Id", typeof(int)))
             {
                 entity = entities.FirstOrDefault(e => Convert.ToInt32(typeof(TEntity).GetProperty("Id", typeof(int)).GetValue(e).ToString()) == id);
             }
@@ -79,7 +80,7 @@ namespace GenericMethods
         {
             var entity = default(TEntity);
 
-            if (typeof(TEntity).GetProperty("Id", typeof(long)) != null)
+            if (entity.HasPropertyWithType<TEntity>("Id", typeof(long)))
             {
                 entity = entities.FirstOrDefault(e => Convert.ToInt64(typeof(TEntity).GetProperty("Id", typeof(long)).GetValue(e).ToString()) == id);
             }
@@ -90,11 +91,25 @@ namespace GenericMethods
         {
             var entity = default(TEntity);
 
-            if (typeof(TEntity).GetProperty("Id", typeof(long)) != null)
+            if (entity.HasPropertyWithType<TEntity>("Id", typeof(long)))
             {
                 entity = entities.FirstOrDefault(e => Convert.ToInt64(typeof(TEntity).GetProperty("Id", typeof(long)).GetValue(e).ToString()) == id);
             }
             return entity;
+        }
+
+        public static bool HasProperty<TEntity>(this TEntity entity, string propertyName) where TEntity : class
+        {
+            return typeof(TEntity).GetProperty(propertyName) != null;
+        }
+        public static bool HasPropertyWithType<TEntity>(this TEntity entity, string propertyName, Type propertyType) where TEntity : class
+        {
+            return typeof(TEntity).GetProperty(propertyName, propertyType) != null;
+        }
+
+        public static bool HasMethod<TEntity>(this TEntity entity, string methodName) where TEntity : class
+        {
+            return typeof(TEntity).GetMethods().Count(m => m.Name == methodName) > 0;
         }
         #endregion
     }
