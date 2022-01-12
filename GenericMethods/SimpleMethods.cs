@@ -36,7 +36,7 @@ namespace GenericMethods
         {
             var entity = default(TEntity);
 
-            if (entity.HasPropertyWithType<TEntity>("Id", typeof(Guid)))
+            if (entity.HasPropertyWithType("Id", typeof(Guid)))
             {
                 entity = entities.FirstOrDefault(e => Guid.Parse(typeof(TEntity).GetProperty("Id", typeof(Guid)).GetValue(e).ToString()) == id);
             }
@@ -47,7 +47,7 @@ namespace GenericMethods
         {
             var entity = default(TEntity);
 
-            if (entity.HasPropertyWithType<TEntity>("Id", typeof(Guid)))
+            if (entity.HasPropertyWithType("Id", typeof(Guid)))
             {
                 entity = entities.FirstOrDefault(e => Guid.Parse(typeof(TEntity).GetProperty("Id", typeof(Guid)).GetValue(e).ToString()) == id);
             }
@@ -58,7 +58,7 @@ namespace GenericMethods
         {
             var entity = default(TEntity);
 
-            if (entity.HasPropertyWithType<TEntity>("Id", typeof(int)))
+            if (entity.HasPropertyWithType("Id", typeof(int)))
             {
                 entity = entities.FirstOrDefault(e => Convert.ToInt32(typeof(TEntity).GetProperty("Id", typeof(int)).GetValue(e).ToString()) == id);
             }
@@ -69,7 +69,7 @@ namespace GenericMethods
         {
             var entity = default(TEntity);
 
-            if (entity.HasPropertyWithType<TEntity>("Id", typeof(int)))
+            if (entity.HasPropertyWithType("Id", typeof(int)))
             {
                 entity = entities.FirstOrDefault(e => Convert.ToInt32(typeof(TEntity).GetProperty("Id", typeof(int)).GetValue(e).ToString()) == id);
             }
@@ -80,7 +80,7 @@ namespace GenericMethods
         {
             var entity = default(TEntity);
 
-            if (entity.HasPropertyWithType<TEntity>("Id", typeof(long)))
+            if (entity.HasPropertyWithType("Id", typeof(long)))
             {
                 entity = entities.FirstOrDefault(e => Convert.ToInt64(typeof(TEntity).GetProperty("Id", typeof(long)).GetValue(e).ToString()) == id);
             }
@@ -91,7 +91,7 @@ namespace GenericMethods
         {
             var entity = default(TEntity);
 
-            if (entity.HasPropertyWithType<TEntity>("Id", typeof(long)))
+            if (entity.HasPropertyWithType("Id", typeof(long)))
             {
                 entity = entities.FirstOrDefault(e => Convert.ToInt64(typeof(TEntity).GetProperty("Id", typeof(long)).GetValue(e).ToString()) == id);
             }
