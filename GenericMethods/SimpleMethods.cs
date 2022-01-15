@@ -111,6 +111,32 @@ namespace GenericMethods
         {
             return typeof(TEntity).GetMethods().Count(m => m.Name == methodName) > 0;
         }
-        #endregion
+
+        // This method is also used for other Map functions
+        public static TResult Map<TSource, TResult>(TSource source) where TSource : class where TResult : class,new()
+        {
+            TResult result = new TResult();
+
+            foreach (PropertyInfo property in typeof(TResult).GetProperties())
+            {
+                if (source.HasPropertyWithType(property.Name, property.PropertyType))
+                {
+                   property.SetValue(result, property.GetValue(source));
+                }
+            }
+            return result;
+        }
+
+        public static IEnumerable<TResult> Map<TSource, TResult>(IEnumerable<TSource> sourceCollection) where TSource : class where TResult : class, new()
+        {
+            return sourceCollection.Select(source => Map<TSource,TResult>(source));
+        }
+
+        public static IQueryable<TResult> Map<TSource, TResult>(IQueryable<TSource> sourceCollection) where TSource : class where TResult : class, new()
+        {
+            return sourceCollection.Select(source => Map<TSource, TResult>(source));
+        }
+
+        #endregion Linq
     }
 }
