@@ -208,7 +208,7 @@ namespace GenericMethods
                             {
                                 PropertyInfo property = properties.SingleOrDefault(p => p.GetCustomAttributes(typeof(DisplayAttribute), false).Cast<DisplayAttribute>().FirstOrDefault().Name == heading);
                                 var type = property.PropertyType;
-                                var value = sheet.GetValue(startRowNo + lineNo, startColNo + i);
+                                var value = sheet.GetValue(startRowNo + lineNo, startColNo + i); //TODO: GetValue methodunda strongly typed yapabilmek için type'ın herhangi bir parametresi kullanılabilir mi araştır (changetype object return ettiği için)!!
                                 value = Convert.ChangeType(value, property.PropertyType);
                                 property.SetValue(model, value);
                             }
