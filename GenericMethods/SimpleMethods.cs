@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace GenericMethods
 {
@@ -160,5 +164,72 @@ namespace GenericMethods
         }
         #endregion Mapping for DTO
 
+        #region Excel
+
+        // This method reads a model list from Excel. This method requires you to define Displayname attribute for the wanted properties.
+        // Displaynames should be matched with column Headers.
+        // In Excel table, there must be line numbers in each row so method can check whether there is a new data or not.
+        public static List<TModel> GetModelListFromExcel<TModel>(Stream stream) where TModel : class, new()
+        {
+            try
+            {
+                List<TModel> list = new List<TModel>();
+
+                using (ExcelPackage excelPackage = new ExcelPackage())
+                {
+                    // In older versions of OfficeOpenXml, worksheets index uses 1 as index, not 0
+                    ExcelWorksheet sheet = excelPackage.Workbook.Worksheets[0];
+
+                    ExcelRangeBase displayAttributesFirstCell = sheet.Cells.FirstOrDefault(c => !string.IsNullOrEmpty(c.GetValue<string>()));
+
+                    // Find first displayname address
+                    int startRowNo = displayAttributesFirstCell.Start.Row;
+                    int startColNo = displayAttributesFirstCell.Start.Column;
+
+                    var properties = typeof(TModel).GetProperties();
+
+                    // Headings and count of headings
+                    List<ExcelRangeBase> headings = sheet.Cells.Where(c => !string.IsNullOrEmpty(c.GetValue<string>()) && c.Start.Row == startRowNo).ToList();
+                    int headingCount = sheet.Cells.Where(c=> !string.IsNullOrEmpty(c.GetValue<string>()) && c.Start.Row == startRowNo).Count();
+
+                    // lineNo goes like 1,2,3,4... and on
+                    int lineNo = sheet.GetValue<int>(startRowNo + 1, startColNo - 1);
+                    int startRowNoPlaceholder = startRowNo;
+
+                    while (!lineNo.Equals(default(int)))
+                    {
+                        TModel model = new TModel();
+
+                        for (int i = 0; i < headingCount; i++)
+                        {
+                            string heading = sheet.GetValue<string>(startRowNo, startColNo + i);
+
+                            if (properties.SingleOrDefault(p=> p.GetCustomAttributes(typeof(DisplayAttribute), false).Cast<DisplayAttribute>().FirstOrDefault().Name == heading) != null)
+                            {
+                                PropertyInfo property = properties.SingleOrDefault(p => p.GetCustomAttributes(typeof(DisplayAttribute), false).Cast<DisplayAttribute>().FirstOrDefault().Name == heading);
+                                var type = property.PropertyType;
+                                var value = sheet.GetValue(startRowNo + lineNo, startColNo + i);
+                                value = Convert.ChangeType(value, property.PropertyType);
+                                property.SetValue(model, value);
+                            }
+                        }
+                        list.Add(model);
+                        startRowNoPlaceholder++;
+                        lineNo = sheet.GetValue<int>(startRowNoPlaceholder, startColNo - 1);
+                    }
+                    
+                }
+
+                return list;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        #endregion Excel
     }
 }
