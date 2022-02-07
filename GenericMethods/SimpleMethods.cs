@@ -190,7 +190,7 @@ namespace GenericMethods
 
                     // Headings and count of headings
                     List<ExcelRangeBase> headings = sheet.Cells.Where(c => !string.IsNullOrEmpty(c.GetValue<string>()) && c.Start.Row == startRowNo).ToList();
-                    int headingCount = sheet.Cells.Where(c=> !string.IsNullOrEmpty(c.GetValue<string>()) && c.Start.Row == startRowNo).Count();
+                    int headingCount = sheet.Cells.Where(c => !string.IsNullOrEmpty(c.GetValue<string>()) && c.Start.Row == startRowNo).Count();
 
                     // lineNo goes like 1,2,3,4... and on
                     int lineNo = sheet.GetValue<int>(startRowNo + 1, startColNo - 1);
@@ -204,20 +204,47 @@ namespace GenericMethods
                         {
                             string heading = sheet.GetValue<string>(startRowNo, startColNo + i);
 
-                            if (properties.SingleOrDefault(p=> p.GetCustomAttributes(typeof(DisplayAttribute), false).Cast<DisplayAttribute>().FirstOrDefault().Name == heading) != null)
+                            if (properties.SingleOrDefault(p => p.GetCustomAttributes(typeof(DisplayAttribute), false).Cast<DisplayAttribute>().FirstOrDefault().Name == heading) != null)
                             {
                                 PropertyInfo property = properties.SingleOrDefault(p => p.GetCustomAttributes(typeof(DisplayAttribute), false).Cast<DisplayAttribute>().FirstOrDefault().Name == heading);
                                 var type = property.PropertyType;
-                                var value = sheet.GetValue(startRowNo + lineNo, startColNo + i); //TODO: GetValue methodunda strongly typed yapabilmek için type'ın herhangi bir parametresi kullanılabilir mi araştır (changetype object return ettiği için)!!
-                                value = Convert.ChangeType(value, property.PropertyType);
-                                property.SetValue(model, value);
+                                var value = sheet.GetValue<string>(startRowNo + lineNo, startColNo + i);
+
+                                if (typeof(string) != type)
+                                {
+                                    if (typeof(int) == type)
+                                    {
+                                        if (Int32.TryParse(value, out int val))
+                                        {
+                                            property.SetValue(model, val);
+                                        }
+                                        
+                                    }
+                                    else if(typeof(decimal) == type)
+                                    {
+                                        if (decimal.TryParse(value, out decimal val))
+                                        {
+                                            property.SetValue(model, val);
+                                        }
+                                    }
+                                    else if (typeof(DateTime) == type)
+                                    {
+                                        if (DateTime.TryParse(value, out DateTime val))
+                                        {
+                                            val = DateTime.Parse(val.ToShortDateString());
+                                            property.SetValue(model, val);
+                                        }
+                                    }
+
+                                }
+                               
                             }
                         }
                         list.Add(model);
                         startRowNoPlaceholder++;
                         lineNo = sheet.GetValue<int>(startRowNoPlaceholder, startColNo - 1);
                     }
-                    
+
                 }
 
                 return list;
@@ -228,7 +255,6 @@ namespace GenericMethods
                 throw new Exception(ex.Message);
             }
         }
-
 
         #endregion Excel
     }
