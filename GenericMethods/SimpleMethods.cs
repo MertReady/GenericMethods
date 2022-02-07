@@ -237,6 +237,10 @@ namespace GenericMethods
                                     }
 
                                 }
+                                else
+                                {
+                                    property.SetValue(model, value);
+                                }
                                
                             }
                         }
