@@ -36,10 +36,12 @@ namespace GenericMethods
         #endregion Linq
 
         #region GetEntityById
-
-        // This method directly pass an Id as a parameter and find a spesific entity by Id, apart from type of entity without any need for predicate.
-        // If your 'Id' column is not named exactly 'Id', you could configure it by the help of "idPropertyName" parameter.Example: 'Cars.GetEntityById(id,"CarId");'
-        // If named 'Id' already, just use it like 'Cars.GetEntityById(id);'
+        /// <summary>
+        /// Passing an Id as a parameter and find a spesific entity by Id, apart from type of entity without any need for predicate.
+        /// If your 'Id' column is not named exactly 'Id', you could configure it by the help of "idPropertyName" parameter.Example: 'Cars.GetEntityById(id,"CarId");'
+        /// If named 'Id' already, just use it like 'Cars.GetEntityById(id);'
+        /// </summary>
+        /// <returns>A <see cref="TEntity"/> </returns>
         public static TEntity GetEntityById<TEntity>(this IQueryable<TEntity> entities, Guid id, string idPropertyName = null) where TEntity : class
         {
             var entity = default(TEntity);
@@ -52,6 +54,13 @@ namespace GenericMethods
             return entity;
         }
 
+
+        /// <summary>
+        /// Passing an Id as a parameter and find a spesific entity by Id, apart from type of entity without any need for predicate.
+        /// If your 'Id' column is not named exactly 'Id', you could configure it by the help of "idPropertyName" parameter.Example: 'Cars.GetEntityById(id,"CarId");'
+        /// If named 'Id' already, just use it like 'Cars.GetEntityById(id);'
+        /// </summary>
+        /// <returns>A <see cref="TEntity"/> </returns>
         public static TEntity GetEntityById<TEntity>(this IEnumerable<TEntity> entities, Guid id, string idPropertyName = null) where TEntity : class
         {
             var entity = default(TEntity);
@@ -64,6 +73,13 @@ namespace GenericMethods
             return entity;
         }
 
+
+        /// <summary>
+        /// Passing an Id as a parameter and find a spesific entity by Id, apart from type of entity without any need for predicate.
+        /// If your 'Id' column is not named exactly 'Id', you could configure it by the help of "idPropertyName" parameter.Example: 'Cars.GetEntityById(id,"CarId");'
+        /// If named 'Id' already, just use it like 'Cars.GetEntityById(id);'
+        /// </summary>
+        /// <returns>A <see cref="TEntity"/> </returns>
         public static TEntity GetEntityById<TEntity>(this IQueryable<TEntity> entities, int id, string idPropertyName = null) where TEntity : class
         {
             var entity = default(TEntity);
@@ -76,6 +92,13 @@ namespace GenericMethods
             return entity;
         }
 
+
+        /// <summary>
+        /// Passing an Id as a parameter and find a spesific entity by Id, apart from type of entity without any need for predicate.
+        /// If your 'Id' column is not named exactly 'Id', you could configure it by the help of "idPropertyName" parameter.Example: 'Cars.GetEntityById(id,"CarId");'
+        /// If named 'Id' already, just use it like 'Cars.GetEntityById(id);'
+        /// </summary>
+        /// <returns>A <see cref="TEntity"/> </returns>
         public static TEntity GetEntityById<TEntity>(this IEnumerable<TEntity> entities, int id, string idPropertyName = null) where TEntity : class
         {
             var entity = default(TEntity);
@@ -88,6 +111,13 @@ namespace GenericMethods
             return entity;
         }
 
+
+        /// <summary>
+        /// Passing an Id as a parameter and find a spesific entity by Id, apart from type of entity without any need for predicate.
+        /// If your 'Id' column is not named exactly 'Id', you could configure it by the help of "idPropertyName" parameter.Example: 'Cars.GetEntityById(id,"CarId");'
+        /// If named 'Id' already, just use it like 'Cars.GetEntityById(id);'
+        /// </summary>
+        /// <returns>A <see cref="TEntity"/> </returns>
         public static TEntity GetEntityById<TEntity>(this IQueryable<TEntity> entities, long id, string idPropertyName = null) where TEntity : class
         {
             var entity = default(TEntity);
@@ -100,6 +130,13 @@ namespace GenericMethods
             return entity;
         }
 
+
+        /// <summary>
+        /// Passing an Id as a parameter and find a spesific entity by Id, apart from type of entity without any need for predicate.
+        /// If your 'Id' column is not named exactly 'Id', you could configure it by the help of "idPropertyName" parameter.Example: 'Cars.GetEntityById(id,"CarId");'
+        /// If named 'Id' already, just use it like 'Cars.GetEntityById(id);'
+        /// </summary>
+        /// <returns>A <see cref="TEntity"/> </returns>
         public static TEntity GetEntityById<TEntity>(this IEnumerable<TEntity> entities, long id, string idPropertyName = null) where TEntity : class
         {
             var entity = default(TEntity);
@@ -115,17 +152,26 @@ namespace GenericMethods
 
         #region HasProperty
 
-        // Determines whether an entity has the specified property
+        /// <summary>
+        /// Determines whether an entity has the specified property
+        /// </summary>
+        /// <returns>A <see cref="bool"/> value</returns>
         public static bool HasProperty<TEntity>(this TEntity entity, string propertyName) where TEntity : class
         {
             return typeof(TEntity).GetProperty(propertyName) != null;
         }
-        // Determines whether an entity has the specified property with the specified type
+        /// <summary>
+        /// Determines whether an entity has the specified property with the specified type
+        /// </summary>
+        /// <returns>A <see cref="bool"/> value</returns>
         public static bool HasPropertyWithType<TEntity>(this TEntity entity, string propertyName, Type propertyType) where TEntity : class
         {
             return typeof(TEntity).GetProperty(propertyName, propertyType) != null;
         }
-        // Determines whether an entity has the specified method, 'count' is used for avoiding exception caused by multiple methods with the same name (overloads)
+        /// <summary>
+        /// Determines whether an entity has the specified method, 'count' is used for avoiding exception caused by multiple methods with the same name (overloads)
+        /// </summary>
+        /// <returns>A <see cref="bool"/> value</returns>
         public static bool HasMethod<TEntity>(this TEntity entity, string methodName) where TEntity : class
         {
             return typeof(TEntity).GetMethods().Count(m => m.Name == methodName) > 0;
@@ -138,7 +184,10 @@ namespace GenericMethods
         // This methods could be used for DTO usage. 
         // First overload of method is also used in other overloads.
 
-        // One to one entity mapping
+        /// <summary>
+        /// One to one entity mapping.
+        /// </summary>
+        /// <returns>A <see cref="TResult"/> entity of targeted DTO</returns>
         public static TResult Map<TSource, TResult>(TSource source) where TSource : class where TResult : class, new()
         {
             TResult result = new TResult();
@@ -152,12 +201,19 @@ namespace GenericMethods
             }
             return result;
         }
-        // Many to many entity mapping, returns an IEnumerable collection of targeted DTO
+        /// <summary>
+        /// Many to many entity mapping.
+        /// </summary>
+        /// <returns>A <see cref="IEnumerable"/> collection of targeted DTO</returns>
         public static IEnumerable<TResult> Map<TSource, TResult>(IEnumerable<TSource> sourceCollection) where TSource : class where TResult : class, new()
         {
             return sourceCollection.Select(source => Map<TSource, TResult>(source));
         }
-        // Many to many entity mapping, returns an IQueryable collection of targeted DTO
+
+        /// <summary>
+        /// Many to many entity mapping.
+        /// </summary>
+        /// <returns>A <see cref="IQueryable"/> collection of targeted DTO</returns>
         public static IQueryable<TResult> Map<TSource, TResult>(IQueryable<TSource> sourceCollection) where TSource : class where TResult : class, new()
         {
             return sourceCollection.Select(source => Map<TSource, TResult>(source));
@@ -166,9 +222,13 @@ namespace GenericMethods
 
         #region Excel
 
-        // This method reads a model list from Excel. This method requires you to define Displayname attribute for the wanted properties.
-        // Displaynames should be matched with column Headers.
-        // In Excel table, there must be line numbers in each row so method can check whether there is a new data or not.
+
+        /// <summary>
+        /// Reads a model list from Excel. This method requires you to define Displayname attribute for the wanted properties.
+        /// In Excel table, there must be line numbers in each row so method can check whether there is a new data or not.
+        /// <remarks>Displaynames should be matched with column Headers.</remarks>
+        /// </summary>
+        /// <returns>A <see cref="List"/> of TModel</returns>
         public static List<TModel> GetModelListFromExcel<TModel>(Stream stream) where TModel : class, new()
         {
             try
@@ -218,9 +278,9 @@ namespace GenericMethods
                                         {
                                             property.SetValue(model, val);
                                         }
-                                        
+
                                     }
-                                    else if(typeof(decimal) == type)
+                                    else if (typeof(decimal) == type)
                                     {
                                         if (decimal.TryParse(value, out decimal val))
                                         {
@@ -241,7 +301,7 @@ namespace GenericMethods
                                 {
                                     property.SetValue(model, value);
                                 }
-                               
+
                             }
                         }
                         list.Add(model);
