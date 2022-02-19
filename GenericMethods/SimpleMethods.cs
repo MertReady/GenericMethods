@@ -224,7 +224,7 @@ namespace GenericMethods
 
 
         /// <summary>
-        /// Reads a model list from Excel. This method requires you to define Displayname attribute for the wanted properties.
+        /// Reads a list of model from Excel. This method requires you to define Displayname attribute for the wanted properties of model.
         /// In Excel table, there must be line numbers in each row so method can check whether there is a new data or not.
         /// <remarks>Displaynames should be matched with column Headers.</remarks>
         /// </summary>
